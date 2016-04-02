@@ -74,8 +74,7 @@ if (!fs.existsSync(program.output)) {
     log.debug('creating output directory: ' + program.output);
     fs.mkdirSync(program.output);
 }
-process.chdir(program.output);
-tld = process.cwd();
+
 
 if (program.hasOwnProperty('logfile')) {
   log.add(winston.transports.File, {
@@ -112,7 +111,7 @@ log.info('quickscrape ' + QSVERSION + ' launched with...');
 if (program.url) {
   log.info('- URL: ' + program.url);
 } else {
-  log.info('- URLs from file: ' + program.urls);
+  log.info('- URLs from file: ' + program.urllist);
 }
 if (program.scraper) {
   program.scraper = path.resolve(program.scraper);
@@ -163,6 +162,9 @@ var loadUrls = function(path) {
 
 urllist = program.url ? [program.url] : loadUrls(program.urllist);
 log.info('urls to scrape:', urllist.length);
+
+process.chdir(program.output);
+tld = process.cwd();
 
 // this is the callback we pass to the scraper, so the program
 // can exit when all asynchronous file and download tasks have finished
